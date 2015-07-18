@@ -1,0 +1,27 @@
+{
+  "name": "brackets-cucumber",
+  "version": "0.0.1",
+  "description": "Gherkin/Cucumber/Feature files editor for Brackets",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thr0w/brackets-cucumber.git"
+  },
+  "keywords": [
+    "Brackets",
+    "Cucumber",
+    "Gherkins",
+    "Feature",
+    "BDD",
+    "Editor"
+  ],
+  "author": "thr0w",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/thr0w/brackets-cucumber/issues"
+  },
+  "homepage": "https://github.com/thr0w/brackets-cucumber"
+}
