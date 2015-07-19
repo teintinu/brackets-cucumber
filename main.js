@@ -305,11 +305,12 @@ define(function (require, exports, module) {
         var editor = EditorManager.getCurrentFullEditor();
         editor._codeMirror.addEventListener('keydown', function (e) {
           e.preventDefault();
+          if (e.keyCode == 15)
+            doNewLine();
         })
 
       }
     });
-
 
 
     document.addEventListener('keydown', function (e) {
@@ -334,6 +335,19 @@ define(function (require, exports, module) {
         }
       }
     });
+
+    function doNewLine() {
+      var editor = EditorManager.getCurrentFullEditor();
+      var editor = EditorManager.getCurrentFullEditor();
+      var cursorPos = editor.getCursorPos();
+
+      document.batchOperation(function () {
+        document.setText(formattedText);
+        editor.setCursorPos(cursorPos);
+        editor.setScrollPos(scrollPos.x, scrollPos.y);
+      });
+
+    }
 
     //    debugger;
     //    cm.defaults.extraKeys = {
