@@ -3,6 +3,7 @@ Gherkin/Cucumber/Feature files editor for Brackets
 
 ## Features:
 * Syntax highlight
+* Code folding
 * Beaultifull/Formater including column realignments in examples
 * Line inserting in examples
 
