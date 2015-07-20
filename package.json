@@ -1,7 +1,7 @@
 {
   "name": "brackets-cucumber",
-  "version": "0.10.2",
-  "description": "Gherkin/Cucumber/Feature files editor for Brackets",
+  "version": "0.10.4",
+  "description": "Gherkin/Cucumber/Feature files editor for Brackets, with beautify, row inserting in tables...",
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

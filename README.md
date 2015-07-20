@@ -1,5 +1,5 @@
 # brackets-cucumber
-Gherkin/Cucumber/Feature files editor for Brackets
+Gherkin/Cucumber/Feature files editor for Brackets, with beautify, row inserting in tables...
 
 ## Features:
 * Syntax highlight
