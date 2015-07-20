@@ -1,6 +1,6 @@
 {
   "name": "brackets-cucumber",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Gherkin/Cucumber/Feature files editor for Brackets",
   "main": "main.js",
   "scripts": {
