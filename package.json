@@ -1,6 +1,6 @@
 {
   "name": "brackets-cucumber",
-  "version": "0.10.4",
+  "version": "0.10.5",
   "description": "Gherkin/Cucumber/Feature files editor for Brackets, with beautify, row inserting in tables...",
   "main": "main.js",
   "scripts": {

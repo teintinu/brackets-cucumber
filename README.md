@@ -3,7 +3,7 @@ Gherkin/Cucumber/Feature files editor for Brackets, with beautify, row inserting
 
 ## Features:
 * Syntax highlight
-* Beaultifull/Formater including column realignments in examples
+* Beautify/Formater on saving including column realignments in examples
 * Line inserting in examples
 
 
