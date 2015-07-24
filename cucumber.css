@@ -1,0 +1,8 @@
+.cucumbererror {
+    background-color: red;
+    min-width: 20px;
+    width: 20px !important;
+    -webkit-animation: error 2s infinite;
+    animation: error 2s infinite;
+    z-index: 1000
+}

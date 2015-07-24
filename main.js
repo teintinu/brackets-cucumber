@@ -7,9 +7,11 @@ define(function (require, exports, module) {
     CommandManager = brackets.getModule('command/CommandManager'),
     Commands = brackets.getModule('command/Commands'),
     EditorManager = brackets.getModule('editor/EditorManager'),
+    ExtensionUtils = brackets.getModule("utils/ExtensionUtils"),
     cm = brackets.getModule("thirdparty/CodeMirror2/lib/codemirror");
 
   AppInit.htmlReady(function () {
+    ExtensionUtils.loadStyleSheet(module, "cucumber.css");
     init();
   });
 
@@ -75,13 +77,15 @@ define(function (require, exports, module) {
       })
   }
 
-  var GROUP_LINE = /:/,
+  var GROUP_LINE = /^\s*s?cen.r.?.?:/i,
+      CONJ_LINE = /^\s*(and|but|e|mas)\s.*/i,
     BLANK_LINE = /^\s*$/,
     COMMENT_LINE = /^\s*#/,
     TAG_LINE = /^\s*@/,
     DASHED_LINE = /^(\s|\-)*$/,
     STARTING_SPACES = /^\s*/,
     TRAILING_SPACES = /\s*$/;
+  var error_mark;
 
   function format(document, table_fn) {
     if (document.getLanguage().getId() != 'gherkin')
@@ -94,6 +98,13 @@ define(function (require, exports, module) {
       tag_start = -1,
       group_start = -1,
       table;
+
+    if (error_mark) {
+      try {
+        error_mark.clear();
+      } catch (e) {}
+      error_mark = null;
+    }
 
     analiseRows();
     flush_table(lines.length - 1);
@@ -119,7 +130,9 @@ define(function (require, exports, module) {
         if (line.indexOf('|') >= 0) return exampleLine('|');
         if (line.indexOf('\u2506') >= 0) return exampleLine('\u2506');
         if (GROUP_LINE.test(line)) return groupLine();
-
+        if (CONJ_LINE.test(line))
+        lines[lineIdx] = '    ' + lines[lineIdx].trim();
+        else
         lines[lineIdx] = '  ' + lines[lineIdx].trim();
 
         function groupLine() {
@@ -199,14 +212,14 @@ define(function (require, exports, module) {
 
         function calcColumnWidth(sep) {
 
-          doindent(group_start, lineIdx, '');
+          //doindent(group_start, lineIdx, '');
           var cols = line.split(sep);
 
           if (cols.length != table.cols.length)
-            return table.error = {
-              msg: 'Column count mismatch',
-              line: lineIdx
-            };
+            return table.error = show_error(
+              'Column count mismatch',
+              lineIdx,0,1000
+            );
 
           if (!table.cursorPos.lineIdx && !table.cursorPos.example_start_lineIdx) {
             table.cursorPos.example_start_lineIdx = lineIdx;
@@ -228,10 +241,10 @@ define(function (require, exports, module) {
                 if (col.trim() == '')
                   indent = 0;
                 else
-                  return table.error = {
-                    msg: 'Invalid indentation',
-                    line: lineIdx
-                  };
+                  return table.error = show_error(
+                    'Invalid indentation',
+                    lineIdx, temp, temp+col.length
+                  );
 
               if (table_fn && lineIdx == cursorPos.line) {
                 if (temp < cursorPos.ch && temp + table.cols[idx].width >= cursorPos.ch) {
@@ -240,9 +253,9 @@ define(function (require, exports, module) {
                   table.cursorPos.tableIdx = table.rows.length;
                   table.cursorPos.colIdx = idx;
                   table.cursorPos.colPos = cursorPos.ch - temp + 1 - table.cols[idx].indent;
-                };
-                temp += col.length + 1;
+                }
               }
+              temp += col.length + 1;
 
               col = col.substr(table.cols[idx].indent).replace(TRAILING_SPACES, '');
               var width = col.length;
@@ -279,7 +292,7 @@ define(function (require, exports, module) {
         return;
 
       if (table.error)
-        return mark_table_error();
+        return;
 
       flush_table_example(table_end);
       table.table_end = table_end;
@@ -327,6 +340,26 @@ define(function (require, exports, module) {
 
       table = null;
     }
+
+    function show_error(msg, line, col_init, col_end) {
+      if (!error_mark) {
+        setTimeout(function () {
+          error_mark = editor._codeMirror.markText({
+            line: line,
+            ch: col_init
+          }, {
+            line: line,
+            ch: col_end
+          }, {
+            className: 'cucumbererror',
+            title: msg,
+            handleMouseEvents: true,
+          });
+        }, 700);
+      }
+      return true;
+    }
+
 
     var spaces$cache;
 
@@ -406,6 +439,7 @@ define(function (require, exports, module) {
         for (var row_idx = cursorPos.example_end_tableIdx + 2; row_idx < table.rows.length; row_idx++)
           table.rows[row_idx].lineIdx++;
       });
+
     }
 
 
@@ -460,4 +494,5 @@ define(function (require, exports, module) {
     debugger;
     cm.replaceSelection("\n", "end");
   }
+
 });
