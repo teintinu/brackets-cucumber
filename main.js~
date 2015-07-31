@@ -137,7 +137,7 @@ define(function (require, exports, module) {
           lines[lineIdx] = '  ' + lines[lineIdx].trim();
         else
           lines[lineIdx] = '  ' + lines[lineIdx].trim();
-        flush_table(lineIdx);
+        flush_table_example(lineIdx);
 
         function groupLine() {
           flush_table(lineIdx - 1);
@@ -149,22 +149,22 @@ define(function (require, exports, module) {
         function tagLine() {
           if (tag_start == -1)
             tag_start = lineIdx;
-          flush_example(lineIdx);
+          flush_table_example(lineIdx);
         }
 
         function blankLine() {
-          flush_table(lineIdx)
+          flush_table_example(lineIdx)
         }
 
         function commentLine() {
-          //flush_example(lineIdx)
+          flush_table_example(lineIdx)
         }
 
         function dashedLine() {
           table.dashed.push({
             lineIdx: lineIdx
           });
-          flush_example(lineIdx);
+          flush_table_example(lineIdx);
         }
 
         function exampleLine(sep) {
@@ -276,7 +276,7 @@ define(function (require, exports, module) {
 
     }
 
-    function flush_example(lineIdx) {
+    function flush_table_example(lineIdx) {
       if (table && table.cursorPos.example_start_lineIdx) {
         if (table.cursorPos.line) {
           if (!table.cursorPos.lineIdx) {
@@ -298,7 +298,7 @@ define(function (require, exports, module) {
       if (table.error)
         return;
 
-      flush_example(table_end);
+      flush_table_example(table_end);
       table.table_end = table_end;
       var lineWidth;
       if (table_fn && cursorPos.line >= table.table_start && cursorPos.line <= table_end)
